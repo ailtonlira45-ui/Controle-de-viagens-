@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Painel de Viagens | Log Transportes</title>
+
+    <!-- Fonte profissional -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b0f19;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- Fundo Animado com partículas e gradiente --- */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Gradiente animado sutil */
+        .gradient-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 45%),
+                        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+                        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* Partículas flutuantes */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 12s infinite ease-in-out;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .particle:nth-child(1) { width: 6px; height: 6px; left: 10%; top: 20%; animation-delay: 0s; background: #22c55e; }
+        .particle:nth-child(2) { width: 12px; height: 12px; left: 70%; top: 60%; animation-delay: 2s; background: #3b82f6; }
+        .particle:nth-child(3) { width: 4px; height: 4px; left: 30%; top: 80%; animation-delay: 4s; background: #f59e0b; }
+        .particle:nth-child(4) { width: 8px; height: 8px; left: 85%; top: 15%; animation-delay: 1s; background: #22c55e; }
+        .particle:nth-child(5) { width: 5px; height: 5px; left: 50%; top: 40%; animation-delay: 3s; background: #a78bfa; }
+        .particle:nth-child(6) { width: 10px; height: 10px; left: 15%; top: 70%; animation-delay: 5s; background: #3b82f6; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 60%; top: 25%; animation-delay: 6s; background: #ffffff; }
+        .particle:nth-child(8) { width: 7px; height: 7px; left: 40%; top: 90%; animation-delay: 2.5s; background: #22c55e; }
+        .particle:nth-child(9) { width: 9px; height: 9px; left: 75%; top: 35%; animation-delay: 1.5s; background: #f59e0b; }
+        .particle:nth-child(10) { width: 5px; height: 5px; left: 25%; top: 45%; animation-delay: 3.5s; background: #a78bfa; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.2; }
+            30% { transform: translateY(-35px) translateX(25px) scale(1.3); opacity: 0.7; }
+            60% { transform: translateY(-18px) translateX(-15px) scale(0.85); opacity: 0.4; }
+            100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.2; }
+        }
+
+        /* Linhas de grade animadas simulando estrada */
+        .road-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: moveRoad 25s linear infinite;
+        }
+
+        @keyframes moveRoad {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        /* Container principal */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 580px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Cards com efeito vidro melhorado */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 
+                        0 0 0 1px rgba(34, 197, 94, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), 
+                        0 0 0 1px rgba(34, 197, 94, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 16px;
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            color: #f1f5f9;
+            margin: 0;
+        }
+
+        h2 i {
+            color: #22c55e;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+        }
+
+        .badge {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            margin-left: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: #f1f5f9;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        input[readonly] {
+            background: rgba(15, 23, 42, 0.4);
+            color: #4ade80;
+            font-weight: 700;
+            border-color: rgba(34, 197, 94, 0.25);
+            cursor: default;
+            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+        }
+
+        input::placeholder {
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.3px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #0f172a;
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            box-shadow: 0 15px 35px rgba(34, 197, 94, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-history {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            font-size: 0.85rem;
+            padding: 12px 20px;
+        }
+
+        .btn-history:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+            transform: translateY(-1px);
+            color: #bfdbfe;
+        }
+
+        .btn-history.active {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Painel de histórico com transição suave */
+        .history-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.4s ease,
+                        margin-top 0.4s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .history-panel.show {
+            max-height: 600px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(51, 65, 85, 0.5);
+            color: #cbd5e1;
+            font-weight: 600;
+            padding: 14px 10px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #d1d5db;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        tr {
+            transition: background 0.2s ease;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .km-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-block;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .city-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.78rem;
+            display: inline-block;
+            max-width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            transform: scale(1.05);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .route-arrow {
+            color: #64748b;
+            margin: 0 6px;
+            font-size: 0.7rem;
+        }
+
+        .total-km-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            color: #4ade80;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 5px;
+            }
+            .input-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .glass-card {
+                padding: 20px;
+            }
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.7rem;
+            }
+            .btn-history {
+                font-size: 0.75rem;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fundo animado profissional -->
+    <div class="animated-bg">
+        <div class="gradient-layer"></div>
+        <div class="road-lines"></div>
+        <div class="particles">
+            <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+            <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+            <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Card de Registro -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h2><i class="fas fa-truck-fast"></i> Nova Viagem</h2>
+                <span class="badge" id="contadorViagens">0 viagens</span>
+            </div>
+
+            <!-- Cidades -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Cidade de Saída</label>
+                    <input type="text" id="cidadeSaida" placeholder="Ex: São Paulo">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-flag-checkered"></i> Cidade de Chegada</label>
+                    <input type="text" id="cidadeChegada" placeholder="Ex: Rio de Janeiro">
+                </div>
+            </div>
+
+            <!-- Datas -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="far fa-calendar-alt"></i> Início</label>
+                    <input type="datetime-local" id="inicio">
+                </div>
+                <div class="input-group">
+                    <label><i class="far fa-calendar-check"></i> Fim</label>
+                    <input type="datetime-local" id="fim">
+                </div>
+            </div>
+
+            <!-- KM -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-play"></i> KM Inicial</label>
+                    <input type="number" id="kmInicial" placeholder="0" oninput="calcularKM()">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-stop"></i> KM Final</label>
+                    <input type="number" id="kmFinal" placeholder="0" oninput="calcularKM()">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-road"></i> Total KM</label>
+                <input type="text" id="totalKM" placeholder="Calculado automaticamente" readonly>
+            </div>
+
+            <button class="btn btn-primary" onclick="salvar()">
+                <i class="fas fa-save"></i> Registrar Viagem
+            </button>
+        </div>
+
+        <!-- Card Histórico -->
+        <div class="glass-card">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-bar"></i> Histórico</h2>
+                <button class="btn btn-history" id="btnHistorico" onclick="toggleHistorico()">
+                    <i class="fas fa-chevron-down" id="iconeHistorico"></i>
+                    <span id="textoHistorico">Ver Histórico</span>
+                </button>
+            </div>
+
+            <!-- Painel expansível do histórico -->
+            <div class="history-panel" id="historyPanel">
+                <div class="total-km-info" id="totalKmInfo" style="display: none;">
+                    <i class="fas fa-route"></i>
+                    <span id="totalKmGeral">Total geral: 0 km</span>
+                </div>
+                <div class="table-wrapper">
+                    <table id="tabela">
+                        <thead>
+                            <tr>
+                                <th>Rota</th>
+                                <th>Início</th>
+                                <th>Fim</th>
+                                <th>KM</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let viagens = JSON.parse(localStorage.getItem("viagens")) || [];
+        let historicoAberto = false;
+
+        function formatarData(isoString) {
+            if (!isoString) return "—";
+            const data = new Date(isoString);
+            return data.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(',', '');
+        }
+
+        function calcularKM() {
+            const ini = parseFloat(document.getElementById("kmInicial").value);
+            const fim = parseFloat(document.getElementById("kmFinal").value);
+
+            if (!isNaN(ini) && !isNaN(fim) && fim >= ini) {
+                document.getElementById("totalKM").value = (fim - ini).toFixed(0);
+            } else if (ini && fim && fim < ini) {
+                document.getElementById("totalKM").value = "KM inválido";
+            } else {
+                document.getElementById("totalKM").value = "";
+            }
+        }
+
+        function toggleHistorico() {
+            const panel = document.getElementById("historyPanel");
+            const icone = document.getElementById("iconeHistorico");
+            const texto = document.getElementById("textoHistorico");
+            const btn = document.getElementById("btnHistorico");
+
+            historicoAberto = !historicoAberto;
+
+            if (historicoAberto) {
+                panel.classList.add("show");
+                icone.className = "fas fa-chevron-up";
+                texto.textContent = "Ocultar Histórico";
+                btn.classList.add("active");
+            } else {
+                panel.classList.remove("show");
+                icone.className = "fas fa-chevron-down";
+                texto.textContent = "Ver Histórico";
+                btn.classList.remove("active");
+            }
+        }
+
+        function atualizarContador() {
+            document.getElementById("contadorViagens").textContent = `${viagens.length} viagem(ns)`;
+        }
+
+        function atualizarTotalKM() {
+            const total = viagens.reduce((acc, v) => acc + (v.km || 0), 0);
+            const infoDiv = document.getElementById("totalKmInfo");
+            const totalSpan = document.getElementById("totalKmGeral");
+            
+            if (viagens.length > 0) {
+                infoDiv.style.display = "flex";
+                totalSpan.textContent = `Total geral: ${total} km`;
+            } else {
+                infoDiv.style.display = "none";
+            }
+        }
+
+        function salvar() {
+            const cidadeSaida = document.getElementById("cidadeSaida").value.trim();
+            const cidadeChegada = document.getElementById("cidadeChegada").value.trim();
+            const inicio = document.getElementById("inicio").value;
+            const fim = document.getElementById("fim").value;
+            const km = document.getElementById("totalKM").value;
+
+            if (!cidadeSaida || !cidadeChegada) {
+                alert("⚠️ Por favor, preencha as cidades de saída e chegada.");
+                return;
+            }
+
+            if (!km || km === "KM inválido" || isNaN(parseInt(km))) {
+                alert("⚠️ Por favor, preencha os KM inicial e final corretamente.");
+                return;
+            }
+
+            const viagem = {
+                cidadeSaida: cidadeSaida,
+                cidadeChegada: cidadeChegada,
+                inicio: inicio,
+                fim: fim,
+                km: parseInt(km)
+            };
+
+            viagens.push(viagem);
+            localStorage.setItem("viagens", JSON.stringify(viagens));
+
+            carregar();
+            limpar();
+            atualizarContador();
+            
+            // Feedback visual
+            const btn = document.querySelector('.btn-primary');
+            btn.style.transform = 'scale(0.96)';
+            setTimeout(() => { btn.style.transform = ''; }, 150);
+
+            // Abrir histórico automaticamente se estiver fechado
+            if (!historicoAberto) {
+                toggleHistorico();
+            }
+        }
+
+        function carregar() {
+            const tbody = document.querySelector("#tabela tbody");
+            tbody.innerHTML = "";
+
+            if (viagens.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-message"><i class="far fa-clipboard"></i> Nenhuma viagem registrada</td></tr>`;
+            } else {
+                viagens.forEach((v, i) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>
+                            <span class="city-badge" title="${v.cidadeSaida || '—'}">${v.cidadeSaida || '—'}</span>
+                            <i class="fas fa-arrow-right route-arrow"></i>
+                            <span class="city-badge" title="${v.cidadeChegada || '—'}">${v.cidadeChegada || '—'}</span>
+                        </td>
+                        <td>${formatarData(v.inicio)}</td>
+                        <td>${formatarData(v.fim)}</td>
+                        <td><span class="km-badge">${v.km} km</span></td>
+                        <td><button class="delete-btn" onclick="excluir(${i})" title="Excluir viagem"><i class="fas fa-trash-alt"></i></button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            atualizarContador();
+            atualizarTotalKM();
+        }
+
+        function excluir(i) {
+            if (confirm("Tem certeza que deseja excluir esta viagem?")) {
+                viagens.splice(i, 1);
+                localStorage.setItem("viagens", JSON.stringify(viagens));
+                carregar();
+            }
+        }
+
+        function limpar() {
+            document.getElementById("cidadeSaida").value = "";
+            document.getElementById("cidadeChegada").value = "";
+            document.getElementById("inicio").value = "";
+            document.getElementById("fim").value = "";
+            document.getElementById("kmInicial").value = "";
+            document.getElementById("kmFinal").value = "";
+            document.getElementById("totalKM").value = "";
+        }
+
+        // Inicialização
+        carregar();
+        atualizarContador();
+    </script>
+</body>
+</html>
