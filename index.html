@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Painel de Viagens | NS Log Transportes</title>
+    <title>Painel de Viagens | VIANORTESUL</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #991b1b;
+            --primary-light: #ef4444;
+            --bg-dark: #0f0f0f;
+            --bg-card: rgba(25, 25, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 30px rgba(220, 38, 38, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,9 +36,9 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #1a0000;
-            color: #ffffff;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -28,8 +46,11 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* Background Animado */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -38,24 +59,41 @@
             height: 100%;
             z-index: 0;
             overflow: hidden;
+            pointer-events: none;
         }
 
         .gradient-layer {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 50, 50, 0.2) 0%, transparent 45%),
-                        radial-gradient(circle at 50% 50%, rgba(200, 0, 0, 0.1) 0%, transparent 50%),
-                        linear-gradient(135deg, #1a0000 0%, #2d0000 100%);
+            background: 
+                radial-gradient(ellipse at 15% 30%, rgba(220, 38, 38, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 70%, rgba(239, 68, 68, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(153, 27, 27, 0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #0f0f0f 0%, #1a0f0f 50%, #0f0f0f 100%);
             background-size: 200% 200%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientShift 20s ease infinite;
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 0%; }
+            0%, 100% { background-position: 0% 0%; }
             50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
+        }
+
+        .grid-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
         }
 
         .particles {
@@ -67,111 +105,103 @@
         .particle {
             position: absolute;
             border-radius: 50%;
-            animation: float 12s infinite ease-in-out;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            animation: float 14s infinite ease-in-out;
+            filter: blur(1px);
         }
 
-        .particle:nth-child(1) { width: 6px; height: 6px; left: 10%; top: 20%; animation-delay: 0s; background: #ff4444; }
-        .particle:nth-child(2) { width: 12px; height: 12px; left: 70%; top: 60%; animation-delay: 2s; background: #ff6666; }
-        .particle:nth-child(3) { width: 4px; height: 4px; left: 30%; top: 80%; animation-delay: 4s; background: #ff3333; }
-        .particle:nth-child(4) { width: 8px; height: 8px; left: 85%; top: 15%; animation-delay: 1s; background: #ff5555; }
-        .particle:nth-child(5) { width: 5px; height: 5px; left: 50%; top: 40%; animation-delay: 3s; background: #ff2222; }
-        .particle:nth-child(6) { width: 10px; height: 10px; left: 15%; top: 70%; animation-delay: 5s; background: #ff4444; }
-        .particle:nth-child(7) { width: 3px; height: 3px; left: 60%; top: 25%; animation-delay: 6s; background: #ffffff; }
-        .particle:nth-child(8) { width: 7px; height: 7px; left: 40%; top: 90%; animation-delay: 2.5s; background: #ff3333; }
+        .particle:nth-child(1) { width: 3px; height: 3px; left: 12%; top: 25%; animation-delay: 0s; background: var(--primary); opacity: 0.5; }
+        .particle:nth-child(2) { width: 4px; height: 4px; left: 75%; top: 60%; animation-delay: 2s; background: var(--primary-light); opacity: 0.4; }
+        .particle:nth-child(3) { width: 2px; height: 2px; left: 35%; top: 75%; animation-delay: 4s; background: var(--primary); opacity: 0.5; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 85%; top: 20%; animation-delay: 1s; background: #ffffff; opacity: 0.3; }
+        .particle:nth-child(5) { width: 3px; height: 3px; left: 55%; top: 45%; animation-delay: 3s; background: var(--primary-light); opacity: 0.4; }
+        .particle:nth-child(6) { width: 2px; height: 2px; left: 10%; top: 80%; animation-delay: 5s; background: var(--primary); opacity: 0.5; }
+        .particle:nth-child(7) { width: 4px; height: 4px; left: 60%; top: 15%; animation-delay: 6s; background: #ffffff; opacity: 0.3; }
+        .particle:nth-child(8) { width: 3px; height: 3px; left: 40%; top: 85%; animation-delay: 2.5s; background: var(--primary-light); opacity: 0.4; }
 
         @keyframes float {
-            0% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.2; }
-            30% { transform: translateY(-35px) translateX(25px) scale(1.3); opacity: 0.7; }
-            60% { transform: translateY(-18px) translateX(-15px) scale(0.85); opacity: 0.4; }
-            100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.2; }
-        }
-
-        .road-lines {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: moveRoad 25s linear infinite;
-        }
-
-        @keyframes moveRoad {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
+            0%, 100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.3; }
+            25% { transform: translateY(-40px) translateX(30px) scale(1.8); opacity: 0.6; }
+            50% { transform: translateY(-20px) translateX(-20px) scale(0.8); opacity: 0.4; }
+            75% { transform: translateY(-50px) translateX(15px) scale(1.5); opacity: 0.5; }
         }
 
         .container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 680px;
+            max-width: 720px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
 
-        /* Logo NS */
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Header & Logo */
+        .header {
+            text-align: center;
             padding: 10px 0;
         }
 
-        .logo-ns {
-            background: rgba(180, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
-            padding: 16px 32px;
+        .logo-container {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4), 
-                        0 0 0 1px rgba(255, 255, 255, 0.2),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-            animation: logoGlow 3s ease-in-out infinite;
+            gap: 16px;
+            background: rgba(220, 38, 38, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 16px 32px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes logoGlow {
-            0%, 100% { box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2); }
-            50% { box-shadow: 0 20px 45px rgba(255, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 0, 0, 0.3); }
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
         }
 
-        .logo-ns:hover {
-            transform: scale(1.05);
-            box-shadow: 0 25px 50px rgba(255, 0, 0, 0.6), 
-                        0 0 0 2px rgba(255, 255, 255, 0.4),
-                        0 0 80px rgba(255, 0, 0, 0.4);
+        .logo-container:hover::before {
+            transform: translateX(100%);
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 50px rgba(220, 38, 38, 0.5);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5);
         }
 
         .logo-text {
-            font-size: 2.8rem;
+            font-size: 1.8rem;
             font-weight: 900;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 2px 20px rgba(220, 38, 38, 0.6);
             line-height: 1;
         }
 
-        .logo-subtitle {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.9);
-            text-transform: uppercase;
-        }
-
         .logo-divider {
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6), transparent);
-            border-radius: 2px;
+            width: 1px;
+            height: 36px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3), transparent);
         }
 
         .logo-info {
@@ -180,75 +210,111 @@
             gap: 2px;
         }
 
+        .logo-subtitle {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.85);
+            text-transform: uppercase;
+        }
+
+        .logo-tagline {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        /* Indicador de salvamento */
+        .save-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--success);
+            margin-left: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        /* Glass Card */
         .glass-card {
-            background: rgba(180, 0, 0, 0.25);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
+            background: var(--bg-card);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
             padding: 28px;
-            box-shadow: 0 25px 45px rgba(255, 0, 0, 0.3), 
-                        0 0 0 1px rgba(255, 255, 255, 0.1),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-card), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .glass-card::before {
+        .glass-card::after {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
         }
 
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            padding-bottom: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
 
-        h2 {
+        .card-title {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 600;
-            font-size: 1.4rem;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.25rem;
             letter-spacing: -0.3px;
-            color: #ffffff;
+            color: var(--text-primary);
             margin: 0;
         }
 
         h2 i {
-            color: #ffffff;
-            font-size: 1.5rem;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+            color: var(--primary);
+            font-size: 1.3rem;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(220, 38, 38, 0.2);
             color: #ffffff;
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(220, 38, 38, 0.3);
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
+        .badge i {
+            font-size: 0.55rem;
+            color: var(--success);
+        }
+
+        /* Form Elements */
         .input-group {
             margin-bottom: 18px;
             position: relative;
@@ -266,25 +332,24 @@
 
         label {
             display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.68rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #ffffff;
-            margin-bottom: 6px;
-            margin-left: 6px;
+            letter-spacing: 1.2px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
         input, select {
             width: 100%;
-            padding: 13px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
             color: #ffffff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-family: 'Inter', sans-serif;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             outline: none;
         }
 
@@ -294,43 +359,42 @@
             -webkit-appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 16px center;
+            background-position: right 14px center;
             padding-right: 40px;
         }
 
         select option {
-            background: #2d0000;
+            background: #1a1a1a;
             color: #ffffff;
         }
 
         input:focus, select:focus {
-            border-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+            background: rgba(255, 255, 255, 0.07);
         }
 
         input[readonly] {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
             color: #ffffff;
-            font-weight: 700;
-            border-color: rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            border-color: rgba(255, 255, 255, 0.12);
             cursor: default;
+            font-size: 1rem;
             letter-spacing: 0.5px;
-            font-size: 1.1rem;
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 400;
+            color: rgba(255, 255, 255, 0.35);
         }
 
         .novo-veiculo-group {
             display: none;
             margin-top: 12px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 16px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
             animation: slideDown 0.3s ease;
         }
 
@@ -343,345 +407,143 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .novo-veiculo-group label {
-            color: #ffffff;
-        }
-
-        .novo-veiculo-group input {
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .novo-veiculo-group input:focus {
-            border-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-        }
-
+        /* Buttons - Modernos */
         .btn {
-            padding: 14px 24px;
+            padding: 12px 22px;
             border: none;
-            border-radius: 16px;
-            font-weight: 700;
-            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.88rem;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 0.3px;
             font-family: 'Inter', sans-serif;
             position: relative;
             overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
         }
 
         .btn::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            pointer-events: none;
         }
 
-        .btn:active::after {
-            width: 300px;
-            height: 300px;
+        .btn:hover::after {
+            transform: translateX(100%);
         }
 
         .btn-primary {
             width: 100%;
-            background: linear-gradient(135deg, #ffffff, #e0e0e0);
-            color: #1a0000;
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.35);
             font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #e0e0e0, #cccccc);
-            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.45);
+            background: linear-gradient(135deg, #e53e3e, #b91c1c);
+            box-shadow: 0 12px 35px rgba(220, 38, 38, 0.5);
             transform: translateY(-2px);
         }
 
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
         .btn-novo-veiculo {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.85rem;
-            padding: 12px 20px;
-            cursor: pointer;
-            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 18px;
+            font-size: 0.82rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Inter', sans-serif;
-            white-space: nowrap;
         }
 
         .btn-novo-veiculo:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .btn-salvar-veiculo {
-            background: linear-gradient(135deg, #ffffff, #e0e0e0);
-            color: #1a0000;
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #ffffff, #e5e5e5);
+            color: #111111;
             width: 100%;
-            margin-top: 8px;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
         }
 
         .btn-salvar-veiculo:hover {
-            box-shadow: 0 12px 28px rgba(255, 255, 255, 0.45);
+            background: linear-gradient(135deg, #f0f0f0, #d5d5d5);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
 
         .btn-gerenciar-veiculos {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.85rem;
-            padding: 12px 16px;
-            cursor: pointer;
-            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            font-size: 0.82rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'Inter', sans-serif;
-            white-space: nowrap;
         }
 
         .btn-gerenciar-veiculos:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
-        }
-
-        .btn-gerenciar-veiculos .menu-text {
-            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .btn-history {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.85rem;
-            padding: 12px 20px;
-            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .btn-history:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .btn-history.active {
-            background: rgba(255, 255, 255, 0.4);
-            border-color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            background: rgba(220, 38, 38, 0.25);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.25);
         }
 
         .btn-discord {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(88, 101, 242, 0.2);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(88, 101, 242, 0.3);
+            padding: 12px 22px;
             font-size: 0.85rem;
-            padding: 12px 20px;
-            cursor: pointer;
-            border-radius: 16px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Inter', sans-serif;
-            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
         }
 
         .btn-discord:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
-        }
-
-        .history-panel {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                        opacity 0.4s ease,
-                        margin-top 0.4s ease;
-            opacity: 0;
-            margin-top: 0;
-        }
-
-        .history-panel.show {
-            max-height: 1000px;
-            opacity: 1;
-            margin-top: 20px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-            text-align: left;
-        }
-
-        th {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-weight: 600;
-            padding: 14px 8px;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 12px 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            color: #ffffff;
-            font-weight: 400;
-            white-space: nowrap;
-        }
-
-        tr.viagem-row {
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        tr.viagem-row:hover td {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .km-badge {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.78rem;
-            display: inline-block;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .hours-badge {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.78rem;
-            display: inline-block;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .city-badge {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.75rem;
-            display: inline-block;
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .vehicle-badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            display: inline-block;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .delete-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
-            position: relative;
-        }
-
-        .delete-btn:hover {
-            background: #ff0000;
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            transform: scale(1.05);
-        }
-
-        .empty-message {
-            text-align: center;
-            padding: 30px;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-            font-size: 0.9rem;
-            cursor: default;
-        }
-
-        .route-arrow {
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0 4px;
-            font-size: 0.65rem;
-        }
-
-        .total-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 16px;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            color: #ffffff;
-            font-size: 0.82rem;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(88, 101, 242, 0.35);
+            border-color: rgba(88, 101, 242, 0.5);
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
         }
 
         .veiculo-select-row {
@@ -695,6 +557,168 @@
             margin-bottom: 0;
         }
 
+        /* History Panel */
+        .history-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.4s ease,
+                        margin-top 0.4s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .history-panel.show {
+            max-height: 2000px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(220, 38, 38, 0.15);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 14px 12px;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #ffffff;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        tr.viagem-row {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        tr.viagem-row:hover td {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .km-badge {
+            background: rgba(220, 38, 38, 0.15);
+            color: #ef4444;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hours-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .city-badge {
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .vehicle-badge {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #ef4444;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            transform: scale(1.05);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .route-arrow {
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0 4px;
+            font-size: 0.6rem;
+        }
+
+        .total-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
         .footer-links {
             display: flex;
             justify-content: center;
@@ -702,13 +726,14 @@
             flex-wrap: wrap;
         }
 
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
@@ -725,15 +750,13 @@
         }
 
         .modal-content {
-            background: rgba(180, 0, 0, 0.9);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 28px;
-            padding: 32px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 30px;
             max-width: 520px;
             width: 100%;
-            box-shadow: 0 30px 60px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
             animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
@@ -748,12 +771,12 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
             padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .modal-header h3 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -761,7 +784,7 @@
         }
 
         .close-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.08);
             border: none;
             color: #ffffff;
             width: 36px;
@@ -776,7 +799,7 @@
         }
 
         .close-btn:hover {
-            background: rgba(255, 0, 0, 0.5);
+            background: rgba(239, 68, 68, 0.5);
             color: white;
             transform: rotate(90deg);
         }
@@ -789,10 +812,10 @@
         }
 
         .detail-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
             padding: 14px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .detail-item.full-width {
@@ -800,27 +823,27 @@
         }
 
         .detail-label {
-            font-size: 0.68rem;
+            font-size: 0.62rem;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1.2px;
+            color: var(--text-secondary);
             margin-bottom: 6px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .detail-value {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #ffffff;
         }
 
         .detail-value.large {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #ffffff;
         }
 
         .detail-value.vehicle-highlight {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #ffffff;
         }
 
@@ -828,18 +851,14 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
             padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             flex-wrap: wrap;
-        }
-
-        .route-detail i {
-            color: #ffffff;
         }
 
         .veiculo-list-item {
@@ -847,10 +866,15 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .veiculo-list-item:hover {
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .veiculo-list-item .info {
@@ -866,14 +890,14 @@
 
         .veiculo-list-item .km {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
         }
 
         .btn-delete-veiculo {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
-            padding: 8px 14px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #ef4444;
+            padding: 8px 16px;
             border-radius: 10px;
             cursor: pointer;
             font-size: 0.8rem;
@@ -883,9 +907,27 @@
         }
 
         .btn-delete-veiculo:hover {
-            background: #ff0000;
+            background: #ef4444;
             color: white;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-modal-close {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #ffffff;
+            width: 100%;
+            font-weight: 700;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal-close:hover {
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
         }
 
         @media (max-width: 480px) {
@@ -903,18 +945,19 @@
                 grid-template-columns: 1fr;
             }
             th, td {
-                padding: 8px 4px;
+                padding: 10px 6px;
                 font-size: 0.7rem;
             }
             .veiculo-select-row {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .btn-gerenciar-veiculos .menu-text {
-                display: inline;
-            }
             .logo-text {
-                font-size: 2.2rem;
+                font-size: 1.4rem;
+                letter-spacing: 4px;
+            }
+            .logo-container {
+                padding: 12px 20px;
             }
         }
     </style>
@@ -922,7 +965,7 @@
 <body>
     <div class="animated-bg">
         <div class="gradient-layer"></div>
-        <div class="road-lines"></div>
+        <div class="grid-pattern"></div>
         <div class="particles">
             <div class="particle"></div><div class="particle"></div><div class="particle"></div>
             <div class="particle"></div><div class="particle"></div><div class="particle"></div>
@@ -931,25 +974,37 @@
     </div>
 
     <div class="container">
-        <!-- Logo NS -->
-        <div class="logo-container">
-            <div class="logo-ns">
-                <span class="logo-text">NS</span>
+        <!-- Logo -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-truck-fast"></i>
+                </div>
+                <span class="logo-text">VIANORTESUL</span>
                 <div class="logo-divider"></div>
                 <div class="logo-info">
-                    <span class="logo-subtitle">Log Transportes</span>
+                    <span class="logo-subtitle">Transportes</span>
+                    <span class="logo-tagline">Excelência em cada rota</span>
                 </div>
+                <span class="save-indicator" id="saveIndicator">
+                    <i class="fas fa-check-circle"></i> Salvo
+                </span>
             </div>
         </div>
 
         <!-- Card de Registro -->
         <div class="glass-card">
             <div class="card-header">
-                <h2><i class="fas fa-truck-fast"></i> Nova Viagem</h2>
-                <span class="badge" id="contadorViagens">0 viagens</span>
+                <div class="card-title">
+                    <i class="fas fa-route"></i>
+                    <h2>Nova Viagem</h2>
+                </div>
+                <span class="badge" id="contadorViagens">
+                    <i class="fas fa-circle"></i> 0 viagens
+                </span>
             </div>
 
-            <!-- Veículo - Select + Botões -->
+            <!-- Veículo -->
             <div class="input-group">
                 <label><i class="fas fa-truck"></i> Veículo</label>
                 <div class="veiculo-select-row">
@@ -958,21 +1013,21 @@
                             <option value="">Selecione um veículo...</option>
                         </select>
                     </div>
-                    <button type="button" class="btn-novo-veiculo" onclick="toggleNovoVeiculo()" title="Cadastrar novo veículo">
+                    <button type="button" class="btn btn-novo-veiculo" onclick="toggleNovoVeiculo()" title="Cadastrar novo veículo">
                         <i class="fas fa-plus-circle"></i> Novo
                     </button>
-                    <button type="button" class="btn-gerenciar-veiculos" onclick="abrirGerenciarVeiculos()" title="Gerenciar veículos">
-                        <i class="fas fa-cog"></i> <span class="menu-text">Menu Veículos</span>
+                    <button type="button" class="btn btn-gerenciar-veiculos" onclick="abrirGerenciarVeiculos()" title="Gerenciar veículos">
+                        <i class="fas fa-cog"></i> Gerenciar
                     </button>
                 </div>
             </div>
 
-            <!-- Painel de novo veículo -->
+            <!-- Novo Veículo -->
             <div class="novo-veiculo-group" id="novoVeiculoPanel">
-                <label><i class="fas fa-truck-loading"></i> Nome do Novo Veículo</label>
+                <label><i class="fas fa-truck-loading"></i> Cadastrar Novo Veículo</label>
                 <div class="input-row">
                     <div class="input-group">
-                        <input type="text" id="novoVeiculoNome" placeholder="Ex: Caminhão Volvo FH 540">
+                        <input type="text" id="novoVeiculoNome" placeholder="Nome do veículo...">
                     </div>
                     <div class="input-group">
                         <input type="number" id="novoVeiculoKm" placeholder="KM Inicial">
@@ -986,24 +1041,24 @@
             <!-- Cidades -->
             <div class="input-row">
                 <div class="input-group">
-                    <label><i class="fas fa-map-marker-alt"></i> Cidade de Saída</label>
-                    <input type="text" id="cidadeSaida" placeholder="Ex: São Paulo">
+                    <label><i class="fas fa-map-marker-alt"></i> Origem</label>
+                    <input type="text" id="cidadeSaida" placeholder="Cidade de origem" oninput="salvarRascunho()">
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-flag-checkered"></i> Cidade de Chegada</label>
-                    <input type="text" id="cidadeChegada" placeholder="Ex: Rio de Janeiro">
+                    <label><i class="fas fa-flag-checkered"></i> Destino</label>
+                    <input type="text" id="cidadeChegada" placeholder="Cidade de destino" oninput="salvarRascunho()">
                 </div>
             </div>
 
             <!-- Datas -->
             <div class="input-row">
                 <div class="input-group">
-                    <label><i class="far fa-calendar-alt"></i> Início</label>
-                    <input type="datetime-local" id="inicio" onchange="calcularHoras()">
+                    <label><i class="far fa-calendar-alt"></i> Data/Hora Início</label>
+                    <input type="datetime-local" id="inicio" onchange="calcularHoras(); salvarRascunho()">
                 </div>
                 <div class="input-group">
-                    <label><i class="far fa-calendar-check"></i> Fim</label>
-                    <input type="datetime-local" id="fim" onchange="calcularHoras()">
+                    <label><i class="far fa-calendar-check"></i> Data/Hora Fim</label>
+                    <input type="datetime-local" id="fim" onchange="calcularHoras(); salvarRascunho()">
                 </div>
             </div>
 
@@ -1011,11 +1066,11 @@
             <div class="input-row">
                 <div class="input-group">
                     <label><i class="fas fa-play"></i> KM Inicial</label>
-                    <input type="number" id="kmInicial" placeholder="0" oninput="calcularKM()">
+                    <input type="number" id="kmInicial" placeholder="0" oninput="calcularKM(); salvarRascunho()">
                 </div>
                 <div class="input-group">
                     <label><i class="fas fa-stop"></i> KM Final</label>
-                    <input type="number" id="kmFinal" placeholder="0" oninput="calcularKM()">
+                    <input type="number" id="kmFinal" placeholder="0" oninput="calcularKM(); salvarRascunho()">
                 </div>
             </div>
 
@@ -1031,15 +1086,18 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="salvar()">
-                <i class="fas fa-save"></i> Registrar Viagem
+            <button class="btn btn-primary" onclick="salvar()" style="margin-top: 10px;">
+                <i class="fas fa-paper-plane"></i> Registrar Viagem
             </button>
         </div>
 
         <!-- Card Histórico -->
         <div class="glass-card">
             <div class="card-header">
-                <h2><i class="fas fa-chart-bar"></i> Histórico</h2>
+                <div class="card-title">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    <h2>Histórico</h2>
+                </div>
                 <button class="btn btn-history" id="btnHistorico" onclick="toggleHistorico()">
                     <i class="fas fa-chevron-down" id="iconeHistorico"></i>
                     <span id="textoHistorico">Ver Histórico</span>
@@ -1069,7 +1127,7 @@
             </div>
         </div>
 
-        <!-- Footer com links -->
+        <!-- Footer -->
         <div class="footer-links">
             <a href="https://discord.gg/2DU52KGY6G" target="_blank" class="btn-discord">
                 <i class="fab fa-discord"></i> Discord
@@ -1078,48 +1136,104 @@
     </div>
 
     <script>
+        // ═══════════════════════════════════
+        // Dados e Estado
+        // ═══════════════════════════════════
         let viagens = JSON.parse(localStorage.getItem("viagens")) || [];
         let veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
+        let rascunho = JSON.parse(localStorage.getItem("rascunhoViagem")) || {};
         let historicoAberto = false;
 
+        // ═══════════════════════════════════
+        // Funções de Formatação
+        // ═══════════════════════════════════
         function formatarData(isoString) {
             if (!isoString) return "—";
             const data = new Date(isoString);
             return data.toLocaleString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
             }).replace(',', '');
         }
 
         function formatarDataCurta(isoString) {
             if (!isoString) return "—";
             const data = new Date(isoString);
-            return data.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit'
-            });
+            return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
         }
 
         function formatarHoras(horasDecimais) {
-            if (isNaN(horasDecimais) || horasDecimais === null || horasDecimais === undefined) return "—";
-            if (horasDecimais < 0) return "—";
-            
+            if (isNaN(horasDecimais) || horasDecimais === null || horasDecimais < 0) return "—";
             const horas = Math.floor(horasDecimais);
             const minutos = Math.round((horasDecimais - horas) * 60);
-            
-            if (horas === 0 && minutos === 0) return "0h";
+            if (horas === 0 && minutos === 0) return "0min";
             if (horas === 0) return `${minutos}min`;
             if (minutos === 0) return `${horas}h`;
             return `${horas}h ${minutos}min`;
         }
 
+        // ═══════════════════════════════════
+        // Salvamento Automático do Rascunho
+        // ═══════════════════════════════════
+        function salvarRascunho() {
+            rascunho = {
+                veiculo: document.getElementById("veiculo").value,
+                cidadeSaida: document.getElementById("cidadeSaida").value,
+                cidadeChegada: document.getElementById("cidadeChegada").value,
+                inicio: document.getElementById("inicio").value,
+                fim: document.getElementById("fim").value,
+                kmInicial: document.getElementById("kmInicial").value,
+                kmFinal: document.getElementById("kmFinal").value
+            };
+            localStorage.setItem("rascunhoViagem", JSON.stringify(rascunho));
+            
+            // Mostrar indicador de salvo
+            const indicator = document.getElementById("saveIndicator");
+            indicator.classList.add("show");
+            setTimeout(() => {
+                indicator.classList.remove("show");
+            }, 1500);
+        }
+
+        function carregarRascunho() {
+            if (rascunho.veiculo) {
+                document.getElementById("veiculo").value = rascunho.veiculo;
+            }
+            if (rascunho.cidadeSaida) {
+                document.getElementById("cidadeSaida").value = rascunho.cidadeSaida;
+            }
+            if (rascunho.cidadeChegada) {
+                document.getElementById("cidadeChegada").value = rascunho.cidadeChegada;
+            }
+            if (rascunho.inicio) {
+                document.getElementById("inicio").value = rascunho.inicio;
+            }
+            if (rascunho.fim) {
+                document.getElementById("fim").value = rascunho.fim;
+            }
+            if (rascunho.kmInicial) {
+                document.getElementById("kmInicial").value = rascunho.kmInicial;
+            }
+            if (rascunho.kmFinal) {
+                document.getElementById("kmFinal").value = rascunho.kmFinal;
+            }
+            
+            // Recalcular totais se tiver dados
+            if (rascunho.kmInicial || rascunho.kmFinal) calcularKM();
+            if (rascunho.inicio || rascunho.fim) calcularHoras();
+        }
+
+        function limparRascunho() {
+            localStorage.removeItem("rascunhoViagem");
+            rascunho = {};
+        }
+
+        // ═══════════════════════════════════
+        // Veículos
+        // ═══════════════════════════════════
         function carregarVeiculos() {
             const select = document.getElementById("veiculo");
             select.innerHTML = '<option value="">Selecione um veículo...</option>';
-            
             veiculos.forEach(v => {
                 const option = document.createElement("option");
                 option.value = v.nome;
@@ -1127,134 +1241,92 @@
                 option.dataset.km = v.kmAtual || 0;
                 select.appendChild(option);
             });
+            
+            // Restaurar veículo do rascunho
+            if (rascunho.veiculo && veiculos.find(v => v.nome === rascunho.veiculo)) {
+                select.value = rascunho.veiculo;
+            }
         }
 
         function onVeiculoChange() {
-            const select = document.getElementById("veiculo");
-            const selectedOption = select.options[select.selectedIndex];
-            
-            if (selectedOption && selectedOption.dataset.km) {
+            const selectedOption = document.getElementById("veiculo").selectedOptions[0];
+            if (selectedOption?.dataset.km) {
                 document.getElementById("kmInicial").value = selectedOption.dataset.km;
                 calcularKM();
-            } else {
-                document.getElementById("kmInicial").value = "";
-                calcularKM();
+                salvarRascunho();
             }
         }
 
         function toggleNovoVeiculo() {
             const panel = document.getElementById("novoVeiculoPanel");
+            panel.classList.toggle("show");
             if (panel.classList.contains("show")) {
-                panel.classList.remove("show");
-                document.getElementById("novoVeiculoNome").value = "";
-                document.getElementById("novoVeiculoKm").value = "";
-            } else {
-                panel.classList.add("show");
                 document.getElementById("novoVeiculoNome").focus();
             }
         }
 
         function cadastrarVeiculo() {
             const nome = document.getElementById("novoVeiculoNome").value.trim();
-            const km = document.getElementById("novoVeiculoKm").value;
-
-            if (!nome) {
-                alert("⚠️ Por favor, digite o nome do veículo.");
-                return;
+            const km = parseFloat(document.getElementById("novoVeiculoKm").value);
+            if (!nome) return alert("⚠️ Digite o nome do veículo.");
+            if (isNaN(km) || km < 0) return alert("⚠️ Digite um KM inicial válido.");
+            if (veiculos.find(v => v.nome.toLowerCase() === nome.toLowerCase())) {
+                return alert("⚠️ Este veículo já está cadastrado!");
             }
-
-            if (!km || isNaN(parseFloat(km)) || parseFloat(km) < 0) {
-                alert("⚠️ Por favor, digite um KM inicial válido.");
-                return;
-            }
-
-            const existe = veiculos.find(v => v.nome.toLowerCase() === nome.toLowerCase());
-            if (existe) {
-                alert("⚠️ Este veículo já está cadastrado! Selecione-o na lista.");
-                return;
-            }
-
-            veiculos.push({
-                nome: nome,
-                kmAtual: parseFloat(km)
-            });
-
+            veiculos.push({ nome, kmAtual: km });
             localStorage.setItem("veiculos", JSON.stringify(veiculos));
             carregarVeiculos();
-
             document.getElementById("veiculo").value = nome;
             onVeiculoChange();
-
             document.getElementById("novoVeiculoPanel").classList.remove("show");
             document.getElementById("novoVeiculoNome").value = "";
             document.getElementById("novoVeiculoKm").value = "";
-
-            alert(`✅ Veículo "${nome}" cadastrado com sucesso!`);
+            salvarRascunho();
+            alert(`✅ Veículo "${nome}" cadastrado!`);
         }
 
         function abrirGerenciarVeiculos() {
-            const existingModal = document.getElementById("modalOverlay");
-            if (existingModal) existingModal.remove();
-
+            document.getElementById("modalOverlay")?.remove();
             const overlay = document.createElement("div");
             overlay.className = "modal-overlay";
             overlay.id = "modalOverlay";
-
-            let veiculosHTML = "";
-            if (veiculos.length === 0) {
-                veiculosHTML = `<div class="empty-message"><i class="fas fa-truck"></i> Nenhum veículo cadastrado</div>`;
-            } else {
-                veiculos.forEach((v, i) => {
-                    veiculosHTML += `
-                        <div class="veiculo-list-item">
-                            <div class="info">
-                                <span class="nome"><i class="fas fa-truck"></i> ${v.nome}</span>
-                                <span class="km">KM Atual: ${v.kmAtual || 0}</span>
-                            </div>
-                            <button class="btn-delete-veiculo" onclick="deletarVeiculo('${v.nome}')">
-                                <i class="fas fa-trash-alt"></i> Deletar
-                            </button>
+            let html = veiculos.length === 0 
+                ? '<div class="empty-message"><i class="fas fa-truck"></i> Nenhum veículo cadastrado</div>'
+                : veiculos.map((v, i) => `
+                    <div class="veiculo-list-item">
+                        <div class="info">
+                            <span class="nome"><i class="fas fa-truck"></i> ${v.nome}</span>
+                            <span class="km">KM Atual: ${v.kmAtual || 0}</span>
                         </div>
-                    `;
-                });
-            }
-
+                        <button class="btn-delete-veiculo" onclick="deletarVeiculo('${v.nome}')">
+                            <i class="fas fa-trash-alt"></i> Remover
+                        </button>
+                    </div>
+                `).join('');
             overlay.innerHTML = `
                 <div class="modal-content" onclick="event.stopPropagation()">
                     <div class="modal-header">
-                        <h3><i class="fas fa-cog"></i> Menu Veículos</h3>
-                        <button class="close-btn" onclick="fecharModal()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <h3><i class="fas fa-cog"></i> Gerenciar Veículos</h3>
+                        <button class="close-btn" onclick="fecharModal()"><i class="fas fa-times"></i></button>
                     </div>
-
-                    <div style="margin-bottom: 20px;">
-                        ${veiculosHTML}
-                    </div>
-
-                    <button class="btn btn-primary" onclick="fecharModal()" style="width: 100%;">
-                        <i class="fas fa-check"></i> Fechar
-                    </button>
-                </div>
-            `;
-
+                    <div style="margin-bottom: 20px; max-height: 400px; overflow-y: auto;">${html}</div>
+                    <button class="btn-modal-close" onclick="fecharModal()"><i class="fas fa-check"></i> Fechar</button>
+                </div>`;
             overlay.addEventListener("click", fecharModal);
             document.body.appendChild(overlay);
         }
 
         function deletarVeiculo(nomeVeiculo) {
-            if (confirm(`Tem certeza que deseja DELETAR o veículo "${nomeVeiculo}"?\n\n⚠️ Esta ação NÃO pode ser desfeita!\n📌 As viagens já registradas com este veículo serão mantidas.`)) {
+            if (confirm(`Tem certeza que deseja REMOVER o veículo "${nomeVeiculo}"?\n\n⚠️ As viagens registradas serão mantidas.`)) {
                 veiculos = veiculos.filter(v => v.nome !== nomeVeiculo);
                 localStorage.setItem("veiculos", JSON.stringify(veiculos));
                 carregarVeiculos();
                 abrirGerenciarVeiculos();
-                alert(`✅ Veículo "${nomeVeiculo}" deletado com sucesso!`);
             }
         }
 
         function atualizarKmVeiculo(nomeVeiculo, kmFinal) {
             const index = veiculos.findIndex(v => v.nome === nomeVeiculo);
-            
             if (index !== -1) {
                 veiculos[index].kmAtual = parseFloat(kmFinal);
                 localStorage.setItem("veiculos", JSON.stringify(veiculos));
@@ -1262,72 +1334,63 @@
             }
         }
 
+        // ═══════════════════════════════════
+        // Cálculos
+        // ═══════════════════════════════════
         function calcularKM() {
-            const kmInicial = parseFloat(document.getElementById("kmInicial").value);
-            const kmFinal = parseFloat(document.getElementById("kmFinal").value);
-            const totalKM = document.getElementById("totalKM");
-
-            if (!isNaN(kmInicial) && !isNaN(kmFinal) && kmFinal >= kmInicial) {
-                totalKM.value = (kmFinal - kmInicial);
-            } else if (!isNaN(kmInicial) && !isNaN(kmFinal) && kmFinal < kmInicial) {
-                totalKM.value = "KM inválido";
+            const inicial = parseFloat(document.getElementById("kmInicial").value);
+            const final = parseFloat(document.getElementById("kmFinal").value);
+            const total = document.getElementById("totalKM");
+            if (!isNaN(inicial) && !isNaN(final) && final >= inicial) {
+                total.value = final - inicial;
+            } else if (!isNaN(inicial) && !isNaN(final)) {
+                total.value = "KM inválido";
             } else {
-                totalKM.value = "";
+                total.value = "";
             }
         }
 
         function calcularHoras() {
             const inicio = document.getElementById("inicio").value;
             const fim = document.getElementById("fim").value;
-            const totalHoras = document.getElementById("totalHoras");
-
+            const total = document.getElementById("totalHoras");
             if (inicio && fim) {
-                const dataInicio = new Date(inicio);
-                const dataFim = new Date(fim);
-                const diffMs = dataFim - dataInicio;
-
-                if (diffMs < 0) {
-                    totalHoras.value = "Datas inválidas";
-                    return;
-                }
-
-                const diffHoras = diffMs / (1000 * 60 * 60);
-                totalHoras.value = diffHoras.toFixed(1);
+                const diff = (new Date(fim) - new Date(inicio)) / 36e5;
+                total.value = diff >= 0 ? diff.toFixed(1) : "Datas inválidas";
             } else {
-                totalHoras.value = "";
+                total.value = "";
             }
         }
 
+        // ═══════════════════════════════════
+        // Histórico
+        // ═══════════════════════════════════
         function toggleHistorico() {
             const panel = document.getElementById("historyPanel");
-            const icone = document.getElementById("iconeHistorico");
-            const texto = document.getElementById("textoHistorico");
             const btn = document.getElementById("btnHistorico");
-
             historicoAberto = !historicoAberto;
-
             if (historicoAberto) {
                 panel.classList.add("show");
-                icone.className = "fas fa-chevron-up";
-                texto.textContent = "Ocultar Histórico";
+                document.getElementById("iconeHistorico").className = "fas fa-chevron-up";
+                document.getElementById("textoHistorico").textContent = "Ocultar";
                 btn.classList.add("active");
             } else {
                 panel.classList.remove("show");
-                icone.className = "fas fa-chevron-down";
-                texto.textContent = "Ver Histórico";
+                document.getElementById("iconeHistorico").className = "fas fa-chevron-down";
+                document.getElementById("textoHistorico").textContent = "Ver Histórico";
                 btn.classList.remove("active");
             }
         }
 
         function atualizarContador() {
-            document.getElementById("contadorViagens").textContent = `${viagens.length} viagem(ns)`;
+            document.getElementById("contadorViagens").innerHTML = 
+                `<i class="fas fa-circle"></i> ${viagens.length} viagem(ns)`;
         }
 
         function atualizarTotais() {
             const totalKm = viagens.reduce((acc, v) => acc + (parseFloat(v.km) || 0), 0);
             const totalHoras = viagens.reduce((acc, v) => acc + (parseFloat(v.horas) || 0), 0);
             const infoDiv = document.getElementById("totalInfo");
-            
             if (viagens.length > 0) {
                 infoDiv.style.display = "flex";
                 document.getElementById("totalKmGeral").textContent = `${totalKm} km`;
@@ -1337,196 +1400,28 @@
             }
         }
 
-        function abrirDetalhes(index) {
-            const v = viagens[index];
-            if (!v) return;
-
-            const existingModal = document.getElementById("modalOverlay");
-            if (existingModal) existingModal.remove();
-
-            const overlay = document.createElement("div");
-            overlay.className = "modal-overlay";
-            overlay.id = "modalOverlay";
-
-            const horasFormatadas = formatarHoras(parseFloat(v.horas) || 0);
-
-            overlay.innerHTML = `
-                <div class="modal-content" onclick="event.stopPropagation()">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-route"></i> Detalhes da Viagem</h3>
-                        <button class="close-btn" onclick="fecharModal()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-
-                    <div class="detail-item full-width" style="margin-bottom: 14px;">
-                        <div class="detail-label"><i class="fas fa-truck"></i> Veículo</div>
-                        <div class="detail-value vehicle-highlight">${v.veiculo || '—'}</div>
-                    </div>
-
-                    <div class="route-detail">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>${v.cidadeSaida || '—'}</span>
-                        <i class="fas fa-arrow-right"></i>
-                        <i class="fas fa-map-pin"></i>
-                        <span>${v.cidadeChegada || '—'}</span>
-                    </div>
-
-                    <div class="detail-grid" style="margin-top: 20px;">
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="far fa-calendar-alt"></i> Início</div>
-                            <div class="detail-value">${formatarData(v.inicio)}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="far fa-calendar-check"></i> Fim</div>
-                            <div class="detail-value">${formatarData(v.fim)}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="fas fa-play"></i> KM Inicial</div>
-                            <div class="detail-value">${v.kmInicial || 0}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="fas fa-stop"></i> KM Final</div>
-                            <div class="detail-value">${v.kmFinal || 0}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="fas fa-road"></i> Quilometragem</div>
-                            <div class="detail-value large">${v.km || 0} km</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label"><i class="far fa-clock"></i> Duração Total</div>
-                            <div class="detail-value large">${horasFormatadas}</div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary" onclick="fecharModal()" style="margin-top: 10px; width: 100%;">
-                        <i class="fas fa-check"></i> Fechar
-                    </button>
-                </div>
-            `;
-
-            overlay.addEventListener("click", fecharModal);
-            document.body.appendChild(overlay);
-        }
-
-        function fecharModal() {
-            const overlay = document.getElementById("modalOverlay");
-            if (overlay) {
-                overlay.style.opacity = "0";
-                overlay.style.transition = "opacity 0.2s ease";
-                setTimeout(() => {
-                    if (overlay && overlay.parentNode) {
-                        overlay.remove();
-                    }
-                }, 200);
-            }
-        }
-
-        function salvar() {
-            const veiculo = document.getElementById("veiculo").value;
-            const cidadeSaida = document.getElementById("cidadeSaida").value.trim();
-            const cidadeChegada = document.getElementById("cidadeChegada").value.trim();
-            const inicio = document.getElementById("inicio").value;
-            const fim = document.getElementById("fim").value;
-            const kmInicial = document.getElementById("kmInicial").value;
-            const kmFinal = document.getElementById("kmFinal").value;
-            const km = document.getElementById("totalKM").value;
-            const horas = document.getElementById("totalHoras").value;
-
-            if (!veiculo) {
-                alert("⚠️ Por favor, selecione um veículo ou cadastre um novo.");
-                return;
-            }
-
-            if (!cidadeSaida || !cidadeChegada) {
-                alert("⚠️ Por favor, preencha as cidades de saída e chegada.");
-                return;
-            }
-
-            if (!inicio || !fim) {
-                alert("⚠️ Por favor, preencha as datas de início e fim.");
-                return;
-            }
-
-            if (!kmInicial || !kmFinal) {
-                alert("⚠️ Por favor, preencha os KM inicial e final.");
-                return;
-            }
-
-            if (!km || km === "KM inválido" || isNaN(parseFloat(km)) || parseFloat(km) < 0) {
-                alert("⚠️ Por favor, preencha os KM inicial e final corretamente.");
-                return;
-            }
-
-            if (!horas || horas === "Datas inválidas" || isNaN(parseFloat(horas)) || parseFloat(horas) < 0) {
-                alert("⚠️ Por favor, verifique as datas para calcular as horas corretamente.");
-                return;
-            }
-
-            const viagem = {
-                veiculo: veiculo,
-                cidadeSaida: cidadeSaida,
-                cidadeChegada: cidadeChegada,
-                inicio: inicio,
-                fim: fim,
-                kmInicial: parseFloat(kmInicial),
-                kmFinal: parseFloat(kmFinal),
-                km: parseFloat(km),
-                horas: parseFloat(horas)
-            };
-
-            viagens.push(viagem);
-            localStorage.setItem("viagens", JSON.stringify(viagens));
-
-            atualizarKmVeiculo(veiculo, parseFloat(kmFinal));
-
-            carregar();
-            limpar();
-            atualizarContador();
-            
-            const btn = document.querySelector('.btn-primary');
-            btn.style.transform = 'scale(0.96)';
-            setTimeout(() => { btn.style.transform = ''; }, 150);
-
-            if (!historicoAberto) {
-                toggleHistorico();
-            }
-
-            alert("✅ Viagem registrada com sucesso!\n🚛 Veículo: " + veiculo + "\n📍 KM Final salvo: " + kmFinal);
-        }
-
         function carregar() {
             const tbody = document.querySelector("#tabela tbody");
-            tbody.innerHTML = "";
-
-            if (viagens.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="empty-message"><i class="far fa-clipboard"></i> Nenhuma viagem registrada<br><small>Clique em "Ver Histórico" para atualizar</small></td></tr>`;
-            } else {
-                viagens.forEach((v, i) => {
-                    const tr = document.createElement("tr");
-                    tr.className = "viagem-row";
-                    tr.onclick = (e) => {
-                        if (!e.target.closest('.delete-btn')) {
-                            abrirDetalhes(i);
-                        }
-                    };
-                    
-                    tr.innerHTML = `
+            tbody.innerHTML = viagens.length === 0 
+                ? '<tr><td colspan="6" class="empty-message"><i class="far fa-clipboard"></i> Nenhuma viagem registrada</td></tr>'
+                : viagens.map((v, i) => `
+                    <tr class="viagem-row" onclick="abrirDetalhes(${i})">
                         <td><span class="vehicle-badge" title="${v.veiculo || '—'}"><i class="fas fa-truck"></i> ${v.veiculo || '—'}</span></td>
                         <td>
-                            <span class="city-badge" title="${v.cidadeSaida || '—'}">${v.cidadeSaida || '—'}</span>
+                            <span class="city-badge">${v.cidadeSaida || '—'}</span>
                             <i class="fas fa-arrow-right route-arrow"></i>
-                            <span class="city-badge" title="${v.cidadeChegada || '—'}">${v.cidadeChegada || '—'}</span>
+                            <span class="city-badge">${v.cidadeChegada || '—'}</span>
                         </td>
                         <td>${formatarDataCurta(v.inicio)}</td>
-                        <td><span class="km-badge">${v.km || 0} km</span></td>
-                        <td><span class="hours-badge">${formatarHoras(parseFloat(v.horas) || 0)}</span></td>
-                        <td><button class="delete-btn" onclick="event.stopPropagation(); excluir(${i})" title="Excluir viagem"><i class="fas fa-trash-alt"></i></button></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
+                        <td><span class="km-badge"><i class="fas fa-road"></i> ${v.km || 0} km</span></td>
+                        <td><span class="hours-badge"><i class="far fa-clock"></i> ${formatarHoras(parseFloat(v.horas) || 0)}</span></td>
+                        <td>
+                            <button class="delete-btn" onclick="event.stopPropagation(); excluir(${i})" title="Excluir">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
             atualizarContador();
             atualizarTotais();
         }
@@ -1539,27 +1434,101 @@
             }
         }
 
+        // ═══════════════════════════════════
+        // Modal de Detalhes
+        // ═══════════════════════════════════
+        function abrirDetalhes(index) {
+            const v = viagens[index];
+            if (!v) return;
+            document.getElementById("modalOverlay")?.remove();
+            const overlay = document.createElement("div");
+            overlay.className = "modal-overlay";
+            overlay.id = "modalOverlay";
+            overlay.innerHTML = `
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-route"></i> Detalhes da Viagem</h3>
+                        <button class="close-btn" onclick="fecharModal()"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="detail-item full-width" style="margin-bottom: 14px;">
+                        <div class="detail-label"><i class="fas fa-truck"></i> Veículo</div>
+                        <div class="detail-value vehicle-highlight">${v.veiculo || '—'}</div>
+                    </div>
+                    <div class="route-detail" style="margin-bottom: 20px;">
+                        <i class="fas fa-map-marker-alt"></i> <span>${v.cidadeSaida || '—'}</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-map-pin"></i> <span>${v.cidadeChegada || '—'}</span>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item"><div class="detail-label">Início</div><div class="detail-value">${formatarData(v.inicio)}</div></div>
+                        <div class="detail-item"><div class="detail-label">Fim</div><div class="detail-value">${formatarData(v.fim)}</div></div>
+                        <div class="detail-item"><div class="detail-label">KM Inicial</div><div class="detail-value">${v.kmInicial || 0}</div></div>
+                        <div class="detail-item"><div class="detail-label">KM Final</div><div class="detail-value">${v.kmFinal || 0}</div></div>
+                        <div class="detail-item"><div class="detail-label">Quilometragem</div><div class="detail-value large">${v.km || 0} km</div></div>
+                        <div class="detail-item"><div class="detail-label">Duração</div><div class="detail-value large">${formatarHoras(parseFloat(v.horas) || 0)}</div></div>
+                    </div>
+                    <button class="btn-modal-close" onclick="fecharModal()"><i class="fas fa-check"></i> Fechar</button>
+                </div>`;
+            overlay.addEventListener("click", fecharModal);
+            document.body.appendChild(overlay);
+        }
+
+        function fecharModal() {
+            const overlay = document.getElementById("modalOverlay");
+            if (overlay) {
+                overlay.style.opacity = "0";
+                overlay.style.transition = "opacity 0.2s ease";
+                setTimeout(() => overlay.remove(), 200);
+            }
+        }
+
+        // ═══════════════════════════════════
+        // Salvar Viagem
+        // ═══════════════════════════════════
+        function salvar() {
+            const veiculo = document.getElementById("veiculo").value;
+            const cidadeSaida = document.getElementById("cidadeSaida").value.trim();
+            const cidadeChegada = document.getElementById("cidadeChegada").value.trim();
+            const inicio = document.getElementById("inicio").value;
+            const fim = document.getElementById("fim").value;
+            const kmInicial = parseFloat(document.getElementById("kmInicial").value);
+            const kmFinal = parseFloat(document.getElementById("kmFinal").value);
+            const km = document.getElementById("totalKM").value;
+            const horas = document.getElementById("totalHoras").value;
+
+            if (!veiculo) return alert("⚠️ Selecione um veículo.");
+            if (!cidadeSaida || !cidadeChegada) return alert("⚠️ Preencha origem e destino.");
+            if (!inicio || !fim) return alert("⚠️ Preencha as datas.");
+            if (isNaN(kmInicial) || isNaN(kmFinal)) return alert("⚠️ Preencha os KM.");
+            if (!km || km === "KM inválido" || parseFloat(km) < 0) return alert("⚠️ KM inválido.");
+            if (!horas || horas === "Datas inválidas" || parseFloat(horas) < 0) return alert("⚠️ Datas inválidas.");
+
+            viagens.push({ veiculo, cidadeSaida, cidadeChegada, inicio, fim, kmInicial, kmFinal, km: parseFloat(km), horas: parseFloat(horas) });
+            localStorage.setItem("viagens", JSON.stringify(viagens));
+            atualizarKmVeiculo(veiculo, kmFinal);
+            carregar();
+            limpar();
+            limparRascunho(); // Limpa o rascunho após salvar
+            if (!historicoAberto) toggleHistorico();
+            alert(`✅ Viagem registrada com sucesso!\n🚛 ${veiculo}\n📍 KM Final: ${kmFinal}`);
+        }
+
         function limpar() {
-            document.getElementById("veiculo").value = "";
-            document.getElementById("cidadeSaida").value = "";
-            document.getElementById("cidadeChegada").value = "";
-            document.getElementById("inicio").value = "";
-            document.getElementById("fim").value = "";
-            document.getElementById("kmInicial").value = "";
-            document.getElementById("kmFinal").value = "";
+            ["veiculo", "cidadeSaida", "cidadeChegada", "inicio", "fim", "kmInicial", "kmFinal"].forEach(id => {
+                document.getElementById(id).value = "";
+            });
             document.getElementById("totalKM").value = "";
             document.getElementById("totalHoras").value = "";
         }
 
-        document.addEventListener("keydown", function(e) {
-            if (e.key === "Escape") {
-                fecharModal();
-            }
-        });
-
+        // ═══════════════════════════════════
+        // Inicialização
+        // ═══════════════════════════════════
+        document.addEventListener("keydown", e => { if (e.key === "Escape") fecharModal(); });
+        
         carregarVeiculos();
+        carregarRascunho(); // Carrega o rascunho salvo ao iniciar
         carregar();
-        atualizarContador();
     </script>
 </body>
 </html>
